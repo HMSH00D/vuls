@@ -113,9 +113,8 @@ func toSlackAttachments(scanResult models.ScanResult) (attaches []*attachment) {
 	if !config.Conf.IgnoreUnscoredCves {
 		cves = append(cves, scanResult.UnknownCves...)
 	}
-	scanResult.KnownCves = cves
 
-	for _, cveInfo := range scanResult.KnownCves {
+	for _, cveInfo := range cves {
 		cveID := cveInfo.CveDetail.CveID
 
 		curentPackages := []string{}

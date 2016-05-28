@@ -83,7 +83,6 @@ func ToPlainTextSummary(r models.ScanResult) string {
 
 		switch {
 		case config.Conf.Lang == "ja" &&
-			d.CveDetail.Jvn.ID != 0 &&
 			0 < d.CveDetail.CvssScore("ja"):
 
 			summary := d.CveDetail.Jvn.Title
@@ -126,7 +125,7 @@ func toPlainTextDetails(data models.ScanResult, osFamily string) (scoredReport, 
 	for _, cve := range data.KnownCves {
 		switch config.Conf.Lang {
 		case "en":
-			if cve.CveDetail.Nvd.ID != 0 {
+			if 0 < cve.CveDetail.Nvd.CvssScore() {
 				scoredReport = append(
 					scoredReport, toPlainTextDetailsLangEn(cve, osFamily))
 			} else {
@@ -134,10 +133,10 @@ func toPlainTextDetails(data models.ScanResult, osFamily string) (scoredReport, 
 					scoredReport, toPlainTextUnknownCve(cve, osFamily))
 			}
 		case "ja":
-			if cve.CveDetail.Jvn.ID != 0 {
+			if 0 < cve.CveDetail.Jvn.CvssScore() {
 				scoredReport = append(
 					scoredReport, toPlainTextDetailsLangJa(cve, osFamily))
-			} else if cve.CveDetail.Nvd.ID != 0 {
+			} else if 0 < cve.CveDetail.Nvd.CvssScore() {
 				scoredReport = append(
 					scoredReport, toPlainTextDetailsLangEn(cve, osFamily))
 			} else {
